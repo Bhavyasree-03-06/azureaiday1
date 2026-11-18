@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetPals - Pet Shop</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff8f0;
+    color: #333;
+}
+
+header {
+    background: #ff914d;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+.cart-btn {
+    background: white;
+    color: #ff914d;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav {
+    background: white;
+    padding: 15px;
+    text-align: center;
+}
+
+nav button {
+    border: none;
+    background: #ffe0c2;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.container {
+    padding: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.pet-card {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px #ddd;
+}
+
+.pet-image {
+    font-size: 65px;
+}
+
+.pet-card h2 {
+    color: #ff914d;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.adopt-btn, .buy-btn {
+    background: #ff914d;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.adopt-btn:hover, .buy-btn:hover {
+    background: #e66b25;
+}
+
+#formSection {
+    display: none;
+    background: white;
+    padding: 25px;
+    max-width: 450px;
+    margin: 25px auto;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px #ddd;
+}
+
+#formSection input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.submit-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+#message {
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    padding: 15px;
+}
+
+footer {
+    background: #ff914d;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* Popup styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+}
+
+.success-icon {
+    font-size: 60px;
+}
+
+.popup-content h2 {
+    color: #28a745;
+}
+
+.close-btn {
+    background: #ff914d;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐾 PetPals</h1>
+
+    <button class="cart-btn" onclick="paymentSuccess()">
+        🛒 Cart (<span id="cart">0</span>)
+    </button>
+</header>
+
+<nav>
+    <button onclick="showAll()">All Pets</button>
+    <button onclick="filterPets('Dog')">Dogs</button>
+    <button onclick="filterPets('Cat')">Cats</button>
+    <button onclick="filterPets('Bird')">Birds</button>
+    <button onclick="filterPets('Small')">Small & Furry</button>
+</nav>
+
+<div class="container" id="petContainer">
+
+    <div class="pet-card" data-type="Dog">
+        <div class="pet-image">🐶</div>
+        <h2>Buddy</h2>
+        <p>Golden Retriever</p>
+        <p class="price">$249</p>
+        <button class="buy-btn" onclick="addCart()">Add to Cart</button>
+        <button class="adopt-btn" onclick="adoptPet('Buddy')">❤️ Adopt Me</button>
+    </div>
+
+    <div class="pet-card" data-type="Cat">
+        <div class="pet-image">🐱</div>
+        <h2>Luna</h2>
+        <p>Maine Coon</p>
+        <p class="price">$129</p>
+        <button class="buy-btn" onclick="addCart()">Add to Cart</button>
+        <button class="adopt-btn" onclick="adoptPet('Luna')">❤️ Adopt Me</button>
+    </div>
+
+    <div class="pet-card" data-type="Small">
+        <div class="pet-image">🐹</div>
+        <h2>Peanut</h2>
+        <p>Syrian Hamster</p>
+        <p class="price">$25</p>
+        <button class="buy-btn" onclick="addCart()">Add to Cart</button>
+        <button class="adopt-btn" onclick="adoptPet('Peanut')">❤️ Adopt Me</button>
+    </div>
+
+    <div class="pet-card" data-type="Bird">
+        <div class="pet-image">🦜</div>
+        <h2>Kiwi</h2>
+        <p>Budgie</p>
+        <p class="price">$45</p>
+        <button class="buy-btn" onclick="addCart()">Add to Cart</button>
+        <button class="adopt-btn" onclick="adoptPet('Kiwi')">❤️ Adopt Me</button>
+    </div>
+
+    <div class="pet-card" data-type="Small">
+        <div class="pet-image">🐰</div>
+        <h2>Clover</h2>
+        <p>Holland Lop</p>
+        <p class="price">$80</p>
+        <button class="buy-btn" onclick="addCart()">Add to Cart</button>
+        <button class="adopt-btn" onclick="adoptPet('Clover')">❤️ Adopt Me</button>
+    </div>
+
+</div>
+
+<!-- Adoption Form -->
+<section id="formSection">
+    <h2>🐾 Pet Adoption Form</h2>
+    <p>Selected Pet: <strong id="selectedPet"></strong></p>
+
+    <form onsubmit="submitAdoption(event)">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number"
+               pattern="[0-9]{10}" maxlength="10" required>
+
+        <button class="submit-btn" type="submit">
+            Submit Adoption Request
+        </button>
+    </form>
+
+    <p id="message"></p>
+</section>
+
+<!-- Payment Success Popup -->
+<div class="popup" id="paymentPopup">
+    <div class="popup-content">
+        <div class="success-icon">✅</div>
+        <h2>Payment Successful!</h2>
+        <p>Thank you for shopping with PetPals! 🐾</p>
+        <p>Your order has been confirmed.</p>
+        <button class="close-btn" onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<footer>
+    <p>🐾 PetPals - Find Your New Best Friend!</p>
+</footer>
+
+<script>
+let cartCount = 0;
+
+function addCart() {
+    cartCount++;
+    document.getElementById("cart").innerText = cartCount;
+    alert("Pet added to cart! 🛒");
+}
+
+// Cart payment popup
+function paymentSuccess() {
+    document.getElementById("paymentPopup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("paymentPopup").style.display = "none";
+}
+
+// Adoption function
+function adoptPet(petName) {
+    document.getElementById("selectedPet").innerText = petName;
+    document.getElementById("formSection").style.display = "block";
+    document.getElementById("message").innerText = "";
+
+    document.getElementById("formSection").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// Submit adoption form
+function submitAdoption(event) {
+    event.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let pet = document.getElementById("selectedPet").innerText;
+
+    document.getElementById("message").innerText =
+        "Thank you, " + name + "! Your adoption request for " +
+        pet + " has been received! ❤️";
+
+    event.target.reset();
+}
+
+// Pet category filters
+function filterPets(type) {
+    let pets = document.querySelectorAll(".pet-card");
+
+    pets.forEach(function(pet) {
+        pet.style.display =
+            pet.dataset.type === type ? "block" : "none";
+    });
+}
+
+function showAll() {
+    document.querySelectorAll(".pet-card").forEach(function(pet) {
+        pet.style.display = "block";
+    });
+}
+</script>
+
+</body>
+</html>
